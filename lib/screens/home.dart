@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('InvestmentPal'),
+        title: const Text('BudgetPal'),
       ),
       backgroundColor: Colors.white,
       body: Padding(
@@ -16,6 +15,14 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Hello, User',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text(
               'Current Investments',
               style: TextStyle(
@@ -39,9 +46,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      _buildInvestmentBox('NVDA: +2%'),
+                      _buildInvestmentBox('NVDA'),
                       const SizedBox(height: 10),
-                      _buildInvestmentBox('AAPL: +2%'),
+                      _buildInvestmentBox('AAPL'),
                     ],
                   ),
                 ),
@@ -58,55 +65,26 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      _buildInvestmentBox('S&P 500: +1%'),
+                      _buildInvestmentBox('S&P 500'),
                       const SizedBox(height: 10),
-                      _buildInvestmentBox('NASDAQ: +1%'),
+                      _buildInvestmentBox('Vanguard'),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 30), // Space before the chart
+            const SizedBox(height: 30), // Space before the budget section
             const Text(
-              'Price Chart (Last 7 Days)',
+              'My Current Budget',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: LineChart(
-                  LineChartData(
-                    titlesData: const FlTitlesData(
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: true, interval: 1),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: true, interval: 1),
-                      ),
-                    ),
-                    gridData: const FlGridData(show: false),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(color: Colors.black),
-                    ),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: _getChartData(),
-                        isCurved: true,
-                        color: Colors.blue,
-                        barWidth: 3,
-                        isStrokeCapRound: true,
-                        belowBarData: BarAreaData(show: false),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            const SizedBox(height: 20),
+            _buildBudgetBox('\$450'), // Budget box with placeholder value
+            const SizedBox(height: 30), // Space before the spending list
+            _buildSpendingList(),
           ],
         ),
       ),
@@ -143,16 +121,65 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  List<FlSpot> _getChartData() {
-    // Simulated polynomial-like data for the last 7 days
-    return [
-      const FlSpot(0, 3),
-      const FlSpot(1, 2.5),
-      const FlSpot(2, 4),
-      const FlSpot(3, 6.5),
-      const FlSpot(4, 5.5),
-      const FlSpot(5, 7),
-      const FlSpot(6, 6),
-    ];
+  Widget _buildBudgetBox(String budget) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Text(
+        budget,
+        style: const TextStyle(
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _buildSpendingList() {
+    return Column(
+      children: [
+        _buildSpendingItem('Groceries', '\$150'),
+        const SizedBox(height: 10),
+        _buildSpendingItem('Utilities', '\$100'),
+        const SizedBox(height: 10),
+        _buildSpendingItem('Entertainment', '\$50'),
+      ],
+    );
+  }
+
+  Widget _buildSpendingItem(String type, String amount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          type,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          amount,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
   }
 }
