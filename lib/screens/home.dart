@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
-import 'groceries.dart'; // Import the Groceries page
-import 'utilities.dart'; // Import the Utilities page
-import 'entertainment.dart'; // Import the Entertainment page
+import 'groceries.dart'; 
+import 'utilities.dart'; 
+import 'entertainment.dart'; 
+import 'chat.dart'; // Import the Chat page
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const HomePage(), // Home section
+    const ChatPage(), // Chat section
+    const Placeholder(), // Placeholder for any other section
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,84 +32,110 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('BudgetPal'),
       ),
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Hello, User',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+      body: _pages[_selectedIndex], // Display the selected page
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: 'More',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Hello, User',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'Current Investments',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Current Investments',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Stocks',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Stocks',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 10),
-                      _buildInvestmentBox('NVDA'),
-                      const SizedBox(height: 10),
-                      _buildInvestmentBox('AAPL'),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildInvestmentBox('NVDA'),
+                    const SizedBox(height: 10),
+                    _buildInvestmentBox('AAPL'),
+                  ],
                 ),
-                const SizedBox(width: 40), // Space between Stocks and Index Funds
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Index Funds',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      _buildInvestmentBox('S&P 500'),
-                      const SizedBox(height: 10),
-                      _buildInvestmentBox('Vanguard'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30), // Space before the budget section
-            const Text(
-              'My Current Budget',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
+              const SizedBox(width: 40), // Space between Stocks and Index Funds
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Index Funds',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildInvestmentBox('S&P 500'),
+                    const SizedBox(height: 10),
+                    _buildInvestmentBox('Vanguard'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 30), // Space before the budget section
+          const Text(
+            'My Current Budget',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 20),
-            _buildBudgetBox('\$450'), // Budget box with placeholder value
-            const SizedBox(height: 30), // Space before the spending list
-            _buildSpendingList(context),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+          _buildBudgetBox('\$450'), // Budget box with placeholder value
+          const SizedBox(height: 30), // Space before the spending list
+          _buildSpendingList(context),
+        ],
       ),
     );
   }
