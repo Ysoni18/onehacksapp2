@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'groceries.dart'; // Import the Groceries page
+import 'utilities.dart'; // Import the Utilities page
+import 'entertainment.dart'; // Import the Entertainment page
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -84,7 +87,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
             _buildBudgetBox('\$450'), // Budget box with placeholder value
             const SizedBox(height: 30), // Space before the spending list
-            _buildSpendingList(),
+            _buildSpendingList(context),
           ],
         ),
       ),
@@ -149,37 +152,60 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSpendingList() {
+  Widget _buildSpendingList(BuildContext context) {
     return Column(
       children: [
-        _buildSpendingItem('Groceries', '\$150'),
+        _buildSpendingItem(context, 'Groceries', '\$150', const GroceriesPage()),
         const SizedBox(height: 10),
-        _buildSpendingItem('Utilities', '\$100'),
+        _buildSpendingItem(context, 'Utilities', '\$100', const UtilitiesPage()),
         const SizedBox(height: 10),
-        _buildSpendingItem('Entertainment', '\$50'),
+        _buildSpendingItem(context, 'Entertainment', '\$50', const EntertainmentPage()),
       ],
     );
   }
 
-  Widget _buildSpendingItem(String type, String amount) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          type,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
+  Widget _buildSpendingItem(BuildContext context, String type, String amount, Widget page) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => page),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
         ),
-        Text(
-          amount,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              type,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              amount,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
