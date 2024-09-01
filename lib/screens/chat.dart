@@ -23,42 +23,46 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
-  Future<void> _sendMessage(String message) async {
-    setState(() {
-      _messages.add({'sender': 'user', 'text': message});
-    });
-    _controller.clear();
+Future<void> _sendMessage(String message) async {
+  setState(() {
+    _messages.add({'sender': 'user', 'text': message});
+  });
+  _controller.clear();
 
-    try {
-      final response = await _makeApiRequest(message);
-      
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          _messages.add({'sender': 'bot', 'text': data['response'] ?? 'No response from bot'});
-        });
-      } else {
-        setState(() {
-          _messages.add({'sender': 'bot', 'text': 'Error: Unable to get a response.'});
-        });
-      }
-    } catch (e) {
+  try {
+    final response = await _makeApiRequest(message);
+    
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final botResponse = data['response']?['text'] ?? 'No response from bot';
       setState(() {
-        _messages.add({'sender': 'bot', 'text': 'Error: ${e.toString()}'});
+        _messages.add({'sender': 'bot', 'text': botResponse});
+      });
+    } else {
+      setState(() {
+        _messages.add({'sender': 'bot', 'text': 'Error: Unable to get a response.'});
       });
     }
+  } catch (e) {
+    setState(() {
+      _messages.add({'sender': 'bot', 'text': 'Error: ${e.toString()}'});
+    });
   }
+}
 
   Future<http.Response> _makeApiRequest(String message) {
-    return http.post(
-      Uri.parse('https://api.gemini.com/v1/chatbot'), // Replace with your actual API endpoint
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
-      },
-      body: jsonEncode({'message': message}),
-    );
-  }
+  return http.post(
+    Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBL_LQtxml6YxvEzzPM-2l4TtOfhgV00J8'), // Replace with your actual API endpoint
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $apiKey',
+    },
+    body: jsonEncode({
+      'message': message,
+      'context': _messages.isEmpty ? null : _messages.last, // Optional context for conversation flow
+    }),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'groceries.dart'; 
-import 'utilities.dart'; 
-import 'entertainment.dart'; 
+import 'groceries.dart';
+import 'utilities.dart';
+import 'entertainment.dart';
 import 'chat.dart'; // Import the Chat page
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BudgetPal'),
+        title: const Text('BudgetPal',
+        style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.teal[700],
       ),
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
@@ -65,124 +68,57 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Hello, User',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
+              color: Colors.teal[800],
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Current Investments',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          _buildSectionTitle('My Current Budget', Icons.account_balance_wallet),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Stocks',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    _buildInvestmentBox('NVDA'),
-                    const SizedBox(height: 10),
-                    _buildInvestmentBox('AAPL'),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 40), // Space between Stocks and Index Funds
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Index Funds',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    _buildInvestmentBox('S&P 500'),
-                    const SizedBox(height: 10),
-                    _buildInvestmentBox('Vanguard'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 30), // Space before the budget section
-          const Text(
-            'My Current Budget',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildBudgetBox('\$450'), // Budget box with placeholder value
-          const SizedBox(height: 30), // Space before the spending list
+          _buildBudgetCard('\$450'),
+          const SizedBox(height: 30),
           _buildSpendingList(context),
         ],
       ),
     );
   }
 
-  Widget _buildInvestmentBox(String text) {
-    return GestureDetector(
-      onTap: () {
-        // Handle tap event
-      },
-      child: Container(
-        padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.green,
+  Widget _buildSectionTitle(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.teal[700]),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Colors.teal[800],
           ),
         ),
-      ),
+      ],
     );
   }
 
-  Widget _buildBudgetBox(String budget) {
+  Widget _buildBudgetCard(String budget) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
+        gradient: LinearGradient(
+          colors: [Colors.teal[200]!, Colors.teal[400]!],
+        ),
+        borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3,
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -191,7 +127,7 @@ class HomePage extends StatelessWidget {
         style: const TextStyle(
           fontSize: 36,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Colors.white,
         ),
         textAlign: TextAlign.center,
       ),
@@ -201,16 +137,16 @@ class HomePage extends StatelessWidget {
   Widget _buildSpendingList(BuildContext context) {
     return Column(
       children: [
-        _buildSpendingItem(context, 'Groceries', '\$150', const GroceriesPage()),
+        _buildSpendingItem(context, 'Groceries', '\$150', const GroceriesPage(), Icons.shopping_cart),
         const SizedBox(height: 10),
-        _buildSpendingItem(context, 'Utilities', '\$100', const UtilitiesPage()),
+        _buildSpendingItem(context, 'Utilities', '\$100', const UtilitiesPage(), Icons.lightbulb_outline),
         const SizedBox(height: 10),
-        _buildSpendingItem(context, 'Entertainment', '\$50', const EntertainmentPage()),
+        _buildSpendingItem(context, 'Entertainment', '\$50', const EntertainmentPage(), Icons.movie),
       ],
     );
   }
 
-  Widget _buildSpendingItem(BuildContext context, String type, String amount, Widget page) {
+  Widget _buildSpendingItem(BuildContext context, String type, String amount, Widget page, IconData icon) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -219,34 +155,42 @@ class HomePage extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: const Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              type,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              children: [
+                Icon(icon, color: Colors.teal[700]),
+                const SizedBox(width: 10),
+                Text(
+                  type,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
             Text(
               amount,
               style: const TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           ],

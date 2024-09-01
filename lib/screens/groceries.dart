@@ -51,6 +51,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Groceries'),
+        backgroundColor: Colors.teal[700],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -59,11 +60,12 @@ class _GroceriesPageState extends State<GroceriesPage> {
           children: [
             _buildBudgetBox('\$${currentData['total']}'), // Reusing the budget box with the groceries amount
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'Insights',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                color: Colors.teal[800],
               ),
             ),
             const SizedBox(height: 20),
@@ -83,14 +85,16 @@ class _GroceriesPageState extends State<GroceriesPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
+        gradient: LinearGradient(
+          colors: [Colors.teal[200]!, Colors.teal[400]!],
+        ),
+        borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3,
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -99,7 +103,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
         style: const TextStyle(
           fontSize: 36,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Colors.white,
         ),
         textAlign: TextAlign.center,
       ),
@@ -110,20 +114,20 @@ class _GroceriesPageState extends State<GroceriesPage> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.lightBlueAccent.withOpacity(0.2),
+        color: Colors.teal[100]!.withOpacity(0.5),
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Row(
         children: [
-          const Icon(Icons.chat_bubble, color: Colors.lightBlueAccent, size: 24),
+          const Icon(Icons.chat_bubble, color: Colors.teal, size: 24),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -148,19 +152,20 @@ class _GroceriesPageState extends State<GroceriesPage> {
           children: [
             IconButton(
               onPressed: _goToPreviousMonth,
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back, color: Colors.teal),
             ),
             Text(
               data['month'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                color: Colors.teal[800],
               ),
             ),
             if (currentMonthIndex > 0) // Only show forward arrow if not at the latest month
               IconButton(
                 onPressed: _goToNextMonth,
-                icon: const Icon(Icons.arrow_forward),
+                icon: const Icon(Icons.arrow_forward, color: Colors.teal),
               )
             else
               const SizedBox(width: 48), // Placeholder to maintain alignment
@@ -174,10 +179,10 @@ class _GroceriesPageState extends State<GroceriesPage> {
         const SizedBox(height: 20),
         Text(
           'Total Monthly Budget: \$${data['total']}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.teal[800],
           ),
         ),
       ],
@@ -189,13 +194,13 @@ class _GroceriesPageState extends State<GroceriesPage> {
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(12.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3,
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -207,13 +212,15 @@ class _GroceriesPageState extends State<GroceriesPage> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
           Text(
             amount,
             style: const TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
         ],
